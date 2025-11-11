@@ -1,4 +1,10 @@
-﻿namespace Assignment3
+﻿/// <summary>
+/// Desc: This program is 
+/// Name: Ganymede
+/// Date: First Half of November, 2025
+/// </summary>
+
+namespace Assignment3
 {
     internal class Program
     {
@@ -15,19 +21,24 @@
             // TODO: 
             // declare a constant to represent the maximum size of the arrays
             // arrays must be large enough to store data for an entire month 
-
+            const int MAX_MONTH_SIZE = 31;
             // TODO:
             // create a string array named dates, using the max size constant you created above to specify the physical size of the array
-
+            string[] dates = new string[MAX_MONTH_SIZE];
             // TODO:
             // create a double array named minutes, using the max size constant you created above to specify the physical size of the array
-
+            double[] minutes = new double[MAX_MONTH_SIZE];
             // TODO:
             // create a variable to represent the logical size of the array
+            int logicalDateSize = 0;
+            int logicalMinuteSize = 0;
+            int count = 0;
 
             DisplayProgramIntro();
 
             // TODO: call DisplayMainMenu()
+
+            DisplayMainMenu();
 
             while (continueProgram)
             {
@@ -112,7 +123,7 @@
                         }
                         break;
                     case "D": //[D]isplay Main Menu
-                        //TODO: call DisplayMainMenu()
+                        DisplayMainMenu();
                         break;
                     case "Q": //[Q]uit Program
                         bool quit = Prompt("Are you sure you want to quit (y/n)? ").ToLower().Equals("y");
@@ -192,38 +203,104 @@
         // ++++++++++++++++++++++++++++++++++++ Difficulty 1 ++++++++++++++++++++++++++++++++++++
 
         // TODO: create the DisplayMainMenu() method
+        static void DisplayMainMenu()
+        {
+            Console.WriteLine("Gaming Minutes Charter Program by Ganymede Mayrose\n" +
+                "[N]ew Daily Entries\n" +
+                "[S]ave Entries to File\n" +
+                "[E]dit Entries\n" +
+                "[L]oad File\n" +
+                "[V]iew Entered / Loaded Data\n" +
+                "[M]onthly Statistics\n" +
+                "[D]isplay Main Menu\n" +
+                "[Q]uit Program");
+            Console.Write("Enter main menu option ('D' to display menu: ");
+        }
 
         // TODO: create the DisplayAnalysisMenu() method
 
+        static void DisplayAnalysisMenu()
+        {
+            Console.WriteLine("[A]verage \n" +
+                "[H]ighest \n" +
+                "[L]owest \n" +
+                "[G]raph \n" +
+                "[R]eturn to Main Menu");
+            Console.Write("Enter Analysis Sub-Menu Option: ");
+        }
+
         // TODO: create the Prompt method
 
+        static string Prompt(string msgLabel)
+        {
+            Console.Write(msgLabel);
+            return Console.ReadLine();
+        }
+
         // TODO: create the PromptDouble() method
+        /// <summary>
+        /// Reads a double and checks if it is a valid number
+        /// </summary>
+        /// <returns>Input or error message</returns>
+        static double PromptDouble()
+        {
+            double bubble = 0.00;
+            if (double.TryParse(Console.ReadLine(), out bubble))
+            {
+                return bubble;
+            }
+            else
+            {
+                Console.Write("Please enter an actual number: ");
+                return 0.00;
+            }
+        }
 
         // optional TODO: create the PromptInt() method
 
+
+
         // TODO: create the CalculateLargest() method
+
+
 
         // TODO: create the CalculateSmallest() method
 
+
+
         // TODO: create the CalculateMean() method
+
+
 
         // ++++++++++++++++++++++++++++++++++++ Difficulty 2 ++++++++++++++++++++++++++++++++++++
 
         // TODO: create the EnterDailyValues method
 
+
+
         // TODO: create the LoadFromFile method
+
+
 
         // TODO: create the SaveToFile method
 
+
+
         // TODO: create the DisplayEntries method
+
+
 
         // ++++++++++++++++++++++++++++++++++++ Difficulty 3 ++++++++++++++++++++++++++++++++++++
 
         // TODO: create the EditEntries method
 
+
+
         // ++++++++++++++++++++++++++++++++++++ Difficulty 4 ++++++++++++++++++++++++++++++++++++
 
         // TODO: create the DisplayChart method
+
+
 
         // ********************************* Helper methods *********************************
 
