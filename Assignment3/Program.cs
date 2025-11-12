@@ -1,9 +1,11 @@
-﻿/// <summary>
+﻿
+using System.Diagnostics.CodeAnalysis;
+
+/// <summary>
 /// Desc: This program is 
 /// Name: Ganymede
 /// Date: First Half of November, 2025
 /// </summary>
-
 namespace Assignment3
 {
     internal class Program
@@ -241,10 +243,11 @@ namespace Assignment3
         /// <summary>
         /// Reads a double and checks if it is a valid number
         /// </summary>
-        /// <returns>Input or error message</returns>
+        /// <returns>What was input or error message</returns>
         static double PromptDouble()
         {
             double bubble = 0.00;
+            Console.Write("Please enter a number: ");
             if (double.TryParse(Console.ReadLine(), out bubble))
             {
                 return bubble;
@@ -252,25 +255,70 @@ namespace Assignment3
             else
             {
                 Console.Write("Please enter an actual number: ");
-                return 0.00;
+                return -500.00;
             }
         }
 
         // optional TODO: create the PromptInt() method
-
-
+        /// <summary>
+        /// Reads an int and checks if it is a valid number
+        /// </summary>
+        /// <returns>What was input or an error message</returns>
+        static int PromptInt()
+        {
+            int vint /* as in vintage story*/ = 0;
+            Console.Write("Please enter a whole number: ");
+            if (int.TryParse(Console.ReadLine(), out vint)) return vint;
+            else
+            {
+                Console.Write("Please enter an integer (no decimals): ");
+                return -500;
+            }
+        }
 
         // TODO: create the CalculateLargest() method
-
-
+        /// <summary>
+        /// Flips through a double array to find the largest number in said array
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <returns>Largest number in array</returns>
+        static double CalculateLargest(double[] arr)
+        {
+            double theLargestNumber = 0;
+            for (int i = 0; i < arr.Length; i++)
+            {
+                if (arr[i] > theLargestNumber) theLargestNumber = arr[i];
+            }
+            return theLargestNumber;
+        }
 
         // TODO: create the CalculateSmallest() method
-
-
+        /// <summary>
+        /// Flips through an array to find the smallest number in said array
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <returns>Smallest number in array</returns>
+        static double CalculateSmallest(double[] arr)
+        {
+            double theSmallestNumber = 0;
+            for (int i = 0; i < arr.Length; i++)
+            {
+                if (arr[i] < theSmallestNumber) theSmallestNumber = arr[i];
+            }
+            return theSmallestNumber;
+        }
 
         // TODO: create the CalculateMean() method
 
-
+        static double CalculateMean(double[] arr)
+        {
+            double mean = 0;
+            for (int i = 0;i < arr.Length; i++)
+            {
+                mean += arr[i];
+            }
+            return mean / arr.Length;
+        }
 
         // ++++++++++++++++++++++++++++++++++++ Difficulty 2 ++++++++++++++++++++++++++++++++++++
 
