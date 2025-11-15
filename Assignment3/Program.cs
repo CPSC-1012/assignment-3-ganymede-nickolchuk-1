@@ -70,7 +70,7 @@ namespace Assignment3
                         else if (AcceptSaveEntryDisclaimer())
                         {
                             string filename = PromptForFilename();
-                            // TODO: call SaveToFile()
+                            SaveToFile(filename, dates, values, count);
                         }
                         else
                         {
@@ -370,7 +370,7 @@ namespace Assignment3
         static int EnterDailyValues(string[] dates, double[] minutes)
         {
             int count = 0;
-            string[] validMonths = { "JAN", "FEB", "MAR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
+            string[] validMonths = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
             string month = "Ah!";
             int monthThatItIs; // numerical value for the month
             bool validInput = false;
@@ -425,16 +425,36 @@ namespace Assignment3
 
 
             // TODO: create the SaveToFile method
-            // this takes the data from the arrays and puts them into a file
-
+            /// <summary>
+            /// Take data from memory and save to file.
+            /// </summary>
+            /// <param name="filename"></param>
+            /// <param name="dates"></param>
+            /// <param name="values"></param>
+            /// <param name="count"></param>
+        static void SaveToFile(string filename, string[] dates, double[] values, int count)
+        {
+            StreamWriter writer = new StreamWriter(filename);
+            for (int i = 0; i < count; i++) // write dates to file
+            {
+                writer.WriteLine(dates[i] + "," + values[i]);
+            }
+            writer.Close();
+        }
 
             // TODO: create the DisplayEntries method
             // take data from arrays and display them in console
-        static void DisplayEntries(string[] dates, double[] minutes, int count)
+            /// <summary>
+            /// Displays values currently loaded in memory
+            /// </summary>
+            /// <param name="dates"></param>
+            /// <param name="minutes"></param>
+            /// <param name="count"></param>
+        static void DisplayEntries(string[] dates, double[] values, int count)
         {
             for (int i = 0; i < count; i++) // print dates from the array[] dates
             {
-                Console.Write($"{dates[i]}: {minutes[i]}, ");
+                Console.Write($"{dates[i]}: {values[i]}, ");
             }
         }
 
