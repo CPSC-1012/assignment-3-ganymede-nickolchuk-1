@@ -54,7 +54,7 @@ namespace Assignment3
 
                         if (AcceptNewEntryDisclaimer())
                         {
-                            // TODO: call EnterDailyValues & assign its return value
+                            count = EnterDailyValues(dates, minutes);
                             Console.WriteLine($"\nEntries completed. {count} records in temporary memory.\n");
                         }
                         else
@@ -232,11 +232,26 @@ namespace Assignment3
         }
 
         // TODO: create the Prompt method
-
+        /// <summary>
+        /// Asks user for input
+        /// </summary>
+        /// <param name="msgLabel"></param>
+        /// <returns>User input</returns>
         static string Prompt(string msgLabel)
         {
-            Console.Write(msgLabel);
-            return Console.ReadLine();
+            bool validInput = false;
+            string bring = null;
+            while (validInput == false)
+            {
+                Console.Write(msgLabel);
+                bring = Console.ReadLine();
+                if (bring == null) validInput = false;
+                else
+                {
+                    validInput = true;
+                }
+            }
+            return bring;
         }
 
         // TODO: create the PromptDouble() method
@@ -244,19 +259,23 @@ namespace Assignment3
         /// Reads a double and checks if it is a valid number
         /// </summary>
         /// <returns>What was input or error message</returns>
-        static double PromptDouble()
+        static double PromptDouble(string msgLabel)
         {
             double bubble = 0.00;
-            Console.Write("Please enter a number: ");
-            if (double.TryParse(Console.ReadLine(), out bubble))
+            bool validInput = false;
+            Console.Write(msgLabel);
+            while (validInput == false)
             {
-                return bubble;
+                if (double.TryParse(Console.ReadLine(), out bubble))
+                {
+                    validInput = true;
+                }
+                else
+                {
+                    Console.Write("Enter a NUMBER: ");
+                }
             }
-            else
-            {
-                Console.Write("Please enter an actual number: ");
-                return -500.00;
-            }
+            return bubble;
         }
 
         // optional TODO: create the PromptInt() method
@@ -264,16 +283,23 @@ namespace Assignment3
         /// Reads an int and checks if it is a valid number
         /// </summary>
         /// <returns>What was input or an error message</returns>
-        static int PromptInt()
+        static int PromptInt(string msgLabel)
         {
-            int vint /* as in vintage story*/ = 0;
-            Console.Write("Please enter a whole number: ");
-            if (int.TryParse(Console.ReadLine(), out vint)) return vint;
-            else
+            int glint = 0;
+            bool validInput = false;
+            Console.Write(msgLabel);
+            while (validInput == false)
             {
-                Console.Write("Please enter an integer (no decimals): ");
-                return -500;
+                if (int.TryParse(Console.ReadLine(), out glint))
+                {
+                    validInput = true;
+                }
+                else
+                {
+                    Console.Write("Enter a whole number (no decimals): ");
+                }
             }
+            return glint;
         }
 
         // TODO: create the CalculateLargest() method
@@ -309,7 +335,11 @@ namespace Assignment3
         }
 
         // TODO: create the CalculateMean() method
-
+        /// <summary>
+        /// Calculate mean average of an array
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <returns>The mean</returns>
         static double CalculateMean(double[] arr)
         {
             double mean = 0;
@@ -323,39 +353,90 @@ namespace Assignment3
         // ++++++++++++++++++++++++++++++++++++ Difficulty 2 ++++++++++++++++++++++++++++++++++++
 
         // TODO: create the EnterDailyValues method
-
-
-
-        // TODO: create the LoadFromFile method
-
-
-
-        // TODO: create the SaveToFile method
-
-
-
-        // TODO: create the DisplayEntries method
-
-
-
-        // ++++++++++++++++++++++++++++++++++++ Difficulty 3 ++++++++++++++++++++++++++++++++++++
-
-        // TODO: create the EditEntries method
-
-
-
-        // ++++++++++++++++++++++++++++++++++++ Difficulty 4 ++++++++++++++++++++++++++++++++++++
-
-        // TODO: create the DisplayChart method
-
-
-
-        // ********************************* Helper methods *********************************
-
         /// <summary>
-        /// Displays the Program intro.
+        /// Allows the user to inform the computer how many minutes of gaming they've accomplished on each day of a month.
         /// </summary>
-        static void DisplayProgramIntro()
+        /// <param name="dates"></param>
+        /// <param name="minutes"></param>
+        /// <returns>The count, how many days there are essentially</returns>
+        static int EnterDailyValues(string[] dates, double[] minutes)
+        {
+            int count = 0;
+            string[] validMonths = { "JAN", "FEB", "MAR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
+            string month = "Ah!";
+            int monthThatItIs;
+            bool validInput = false;
+            int year;
+            int daysInMonth;
+            double mins = -1.0;
+            int day;
+
+            // Let's get the date.
+            // get the month
+            do
+            {
+                month = Prompt("Enter month: ").ToUpper();
+                month = month.Substring(0, 3);
+                if (validMonths.Contains(month)) validInput = true; // if they put in a valid month then they'll be good as golden
+                else validInput = false; // if they didn't put in the month they'll have to do it again
+            }
+            while (validInput == false);
+            // get the int of the month that it is (0 - 11)
+            monthThatItIs = Array.IndexOf(validMonths, month);
+            monthThatItIs++;
+            // now for the year
+            validInput = false;
+            do
+            {
+                year = PromptInt("Enter year: ");
+                if (year > 0 && year < 9999) validInput = true; // the year needs to be between 0 and 9999 or else DateTime.DaysInMonth() won't work
+                else validInput = false;
+            }
+            while (validInput == false);
+
+            // now to find the days in the month. this will affect february the most due to its leap years
+            daysInMonth = DateTime.DaysInMonth(year, monthThatItIs);
+
+            // now we gotta enter in the minutes
+            while (count < daysInMonth)
+            {
+                mins = PromptDouble($"Enter minutes for day {count + 1} (0 if the day hasn't happened yet): ");
+                minutes[count] = mins; // assign minutes to the array
+                count++;
+            }
+            return count;
+        }
+
+            // TODO: create the LoadFromFile method
+
+
+
+            // TODO: create the SaveToFile method
+            // this takes the data from the arrays and puts them into a file
+
+
+            // TODO: create the DisplayEntries method
+
+
+
+            // ++++++++++++++++++++++++++++++++++++ Difficulty 3 ++++++++++++++++++++++++++++++++++++
+
+            // TODO: create the EditEntries method
+
+
+
+            // ++++++++++++++++++++++++++++++++++++ Difficulty 4 ++++++++++++++++++++++++++++++++++++
+
+            // TODO: create the DisplayChart method
+
+
+
+            // ********************************* Helper methods *********************************
+
+            /// <summary>
+            /// Displays the Program intro.
+            /// </summary>
+            static void DisplayProgramIntro()
         {
             Console.WriteLine("****************************************\n" +
                 "*                                      *\n" +
