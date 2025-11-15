@@ -28,12 +28,11 @@ namespace Assignment3
             // create a string array named dates, using the max size constant you created above to specify the physical size of the array
             string[] dates = new string[MAX_MONTH_SIZE];
             // TODO:
-            // create a double array named minutes, using the max size constant you created above to specify the physical size of the array
-            double[] minutes = new double[MAX_MONTH_SIZE];
+            // create a double array named values, using the max size constant you created above to specify the physical size of the array
+            double[] values = new double[MAX_MONTH_SIZE];
             // TODO:
             // create a variable to represent the logical size of the array
-            int logicalDateSize = 0;
-            int logicalMinuteSize = 0;
+            int logicalArraySize = 0;
             int count = 0;
 
             DisplayProgramIntro();
@@ -54,8 +53,9 @@ namespace Assignment3
 
                         if (AcceptNewEntryDisclaimer())
                         {
-                            count = EnterDailyValues(dates, minutes);
+                            count = EnterDailyValues(dates, values);
                             Console.WriteLine($"\nEntries completed. {count} records in temporary memory.\n");
+                            logicalArraySize = count;
                         }
                         else
                         {
@@ -111,7 +111,7 @@ namespace Assignment3
                         }
                         else
                         {
-                            // TODO: call DisplayEntries()
+                            DisplayEntries(dates, values, count);
                         }
                         break;
                     case "M": //[M]onthly Statistics
@@ -121,7 +121,7 @@ namespace Assignment3
                         }
                         else
                         {
-                            RunAnalysisMenu(dates, minutes, count);
+                            RunAnalysisMenu(dates, values, count);
                         }
                         break;
                     case "D": //[D]isplay Main Menu
@@ -139,6 +139,14 @@ namespace Assignment3
                         Console.WriteLine("Invalid reponse. Enter one of the letters to choose a menu option.");
                         break;
                 }
+                //for (int i = 0; i < count; i++)
+                //{
+                //    Console.Write($"{minutes[i]}, ");
+                //}
+                //for (int i = 0; i < count; i++)
+                //{
+                //    Console.Write($"{dates[i]}, ");
+                //} these were for testing, i need to remember to remove this
             }
 
             DisplayProgramOutro();
@@ -240,12 +248,12 @@ namespace Assignment3
         static string Prompt(string msgLabel)
         {
             bool validInput = false;
-            string bring = null;
+            string bring =  null;
             while (validInput == false)
             {
                 Console.Write(msgLabel);
                 bring = Console.ReadLine();
-                if (bring == null) validInput = false;
+                if (bring == null) validInput = false; // check if anything was entered
                 else
                 {
                     validInput = true;
@@ -364,12 +372,12 @@ namespace Assignment3
             int count = 0;
             string[] validMonths = { "JAN", "FEB", "MAR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
             string month = "Ah!";
-            int monthThatItIs;
+            int monthThatItIs; // numerical value for the month
             bool validInput = false;
             int year;
             int daysInMonth;
             double mins = -1.0;
-            int day;
+            int day = 0;
 
             // Let's get the date.
             // get the month
@@ -383,7 +391,7 @@ namespace Assignment3
             while (validInput == false);
             // get the int of the month that it is (0 - 11)
             monthThatItIs = Array.IndexOf(validMonths, month);
-            monthThatItIs++;
+            monthThatItIs++; // this is necessary because the DateTime.DaysInMonth method starts from 1. That means that January is month 1. If we don't make monthThatItIs increment by 1, it will see the array index of January as 0, which crashes it. We don't want it to crash. We want it to work, in fact.
             // now for the year
             validInput = false;
             do
@@ -393,22 +401,27 @@ namespace Assignment3
                 else validInput = false;
             }
             while (validInput == false);
-
             // now to find the days in the month. this will affect february the most due to its leap years
             daysInMonth = DateTime.DaysInMonth(year, monthThatItIs);
-
+            // apply the dates to the array for dates
+            for (int i = 0; i < dates.Length; i++)
+            {
+                dates[i] = Convert.ToString(day + i + 1) + "" + month + "" + Convert.ToString(year);
+            }
             // now we gotta enter in the minutes
+
             while (count < daysInMonth)
             {
                 mins = PromptDouble($"Enter minutes for day {count + 1} (0 if the day hasn't happened yet): ");
                 minutes[count] = mins; // assign minutes to the array
                 count++;
             }
+            Console.WriteLine("Maximum entries reached for the month. Returning now...");
             return count;
         }
 
             // TODO: create the LoadFromFile method
-
+            // take data from file and load into arrays
 
 
             // TODO: create the SaveToFile method
@@ -416,8 +429,14 @@ namespace Assignment3
 
 
             // TODO: create the DisplayEntries method
-
-
+            // take data from arrays and display them in console
+        static void DisplayEntries(string[] dates, double[] minutes, int count)
+        {
+            for (int i = 0; i < count; i++) // print dates from the array[] dates
+            {
+                Console.Write($"{dates[i]}: {minutes[i]}, ");
+            }
+        }
 
             // ++++++++++++++++++++++++++++++++++++ Difficulty 3 ++++++++++++++++++++++++++++++++++++
 
