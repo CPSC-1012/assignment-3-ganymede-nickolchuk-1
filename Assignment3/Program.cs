@@ -85,7 +85,7 @@ namespace Assignment3
                         }
                         else if (AcceptEditEntryDisclaimer())
                         {
-                            //TODO: call EditEntries()
+                            EditEntries(dates, values, count);
                         }
                         else
                         {
@@ -139,14 +139,6 @@ namespace Assignment3
                         Console.WriteLine("Invalid reponse. Enter one of the letters to choose a menu option.");
                         break;
                 }
-                //for (int i = 0; i < count; i++)
-                //{
-                //    Console.Write($"{minutes[i]}, ");
-                //}
-                //for (int i = 0; i < count; i++)
-                //{
-                //    Console.Write($"{dates[i]}, ");
-                //} these were for testing, i need to remember to remove this
             }
 
             DisplayProgramOutro();
@@ -161,8 +153,8 @@ namespace Assignment3
         static void RunAnalysisMenu(string[] dates, double[] numbers, int count)
         {
             bool runAnalysis = true;
-            string year = dates[0].Substring(0, 4),
-                month = dates[0].Substring(5, 3);
+            string year = dates[0].Substring(4, 4),
+                month = dates[0].Substring(1, 3);
 
             while (runAnalysis)
             {
@@ -177,15 +169,15 @@ namespace Assignment3
                 {
                     case "A": //[A]verage 
                         double mean = CalculateMean(numbers, count);
-                        //Console.WriteLine($"The mean value for {month} {year} is: {mean:N2}.\n");
+                        Console.WriteLine($"The mean value for {month} {year} is: {mean:N2}.\n");
                         break;
                     case "H": //[H]ighest 
                         double largest = CalculateLargest(numbers, count);
-                        //Console.WriteLine($"The largest value for {month} {year} is: {largest:N2}.\n");
+                        Console.WriteLine($"The largest value for {month} {year} is: {largest:N2}.\n");
                         break;
                     case "L": //[L]owest
                         double smallest = CalculateSmallest(numbers, count);
-                        //Console.WriteLine($"The smallest value for {month} {year} is: {smallest:N2}.\n");
+                        Console.WriteLine($"The smallest value for {month} {year} is: {smallest:N2}.\n");
                         break;
                     case "G": //[G]raph 
                         //TODO: call DisplayChart()
@@ -360,12 +352,12 @@ namespace Assignment3
         {
             int count = 0;
             string[] validMonths = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
-            string month = "Ah!";
+            string month;
             int monthThatItIs; // numerical value for the month
-            bool validInput = false;
+            bool validInput;
             int year;
             int daysInMonth;
-            double mins = -1.0;
+            double mins;
             int day = 0;
 
             // Let's get the date.
@@ -419,8 +411,6 @@ namespace Assignment3
         static int LoadFromFile(string filename, string[] dates, double[] values)
         {
             int count = 0;
-            string currentDate;
-            double currentValue;
             StreamReader reader = new StreamReader(filename);
             if (File.Exists(filename))
             {
@@ -466,29 +456,78 @@ namespace Assignment3
             /// Displays values currently loaded in memory
             /// </summary>
             /// <param name="dates"></param>
-            /// <param name="minutes"></param>
+            /// <param name="values"></param>
             /// <param name="count"></param>
         static void DisplayEntries(string[] dates, double[] values, int count)
         {
-            for (int i = 0; i < count; i++) // print dates from the array[] dates
+            int[] lineNumbers = new int[count];
+            for (int i = 0; i < count; i++) // Go through the arrays and print what's in them
             {
-                Console.Write($"{dates[i]}: {values[i]}, ");
+                lineNumbers[i] = i;
+                Console.WriteLine(lineNumbers[i] + ": " + dates[i] + ": " + values[i]);
             }
         }
 
-            // ++++++++++++++++++++++++++++++++++++ Difficulty 3 ++++++++++++++++++++++++++++++++++++
+        // ++++++++++++++++++++++++++++++++++++ Difficulty 3 ++++++++++++++++++++++++++++++++++++
 
-            // TODO: create the EditEntries method
+        /// <summary>
+        /// Allows user to edit their their entries for a file or what they currently have loaded
+        /// </summary>
+        /// <param name="dates"></param>
+        /// <param name="values"></param>
+        /// <param name="count"></param>
+        static void EditEntries(string[] dates, double[] values, int count)
+        {
+            string userIsEditing = "N"; // I set it to 'N' so that when the time comes to ask the user if they want to continue editing 'N' while be the default option
+            string seeValues;
+            int[] lineNumbers = new int[count];
+            int userLineNumber;
+            double userValue;
+            bool validInput = false;
+            for (int i = 0; i < count; i++) // generating line numbers for editing
+            {
+                lineNumbers[i] = i;
+            }
+            do
+            {
+                seeValues = Prompt("Do you want to see the loaded values? (Y/N): ").ToUpper();
+                while (validInput == false)
+                {
+                    if (seeValues == "Y")
+                    {
+                        DisplayEntries(dates, values, count);
+                        seeValues = "N";
+                        validInput = true;
+                    }
+                    else if (seeValues == "N")
+                    {
+                        Console.WriteLine("Okay.");
+                        validInput = true;
+                    }
+                    else
+                    {
+                        Prompt("Invalid input. Enter (Y/N) to see loaded values: ").ToUpper();
+                        validInput = false;
+                    }
+                }
+                userLineNumber = PromptInt("Enter line number: ");
+                userValue = PromptDouble("Enter value for line: ");
+                values[userLineNumber] = userValue;
+                userIsEditing = Prompt("Do you want to continue editing? (y/N): ");
+                if (userIsEditing == null) userIsEditing = "N";
+            }
+            while (userIsEditing == "Y");
+
+        }
+
+
+        // ++++++++++++++++++++++++++++++++++++ Difficulty 4 ++++++++++++++++++++++++++++++++++++
+
+        // TODO: create the DisplayChart method
 
 
 
-            // ++++++++++++++++++++++++++++++++++++ Difficulty 4 ++++++++++++++++++++++++++++++++++++
-
-            // TODO: create the DisplayChart method
-
-
-
-            // ********************************* Helper methods *********************************
+        // ********************************* Helper methods *********************************
 
             /// <summary>
             /// Displays the Program intro.
