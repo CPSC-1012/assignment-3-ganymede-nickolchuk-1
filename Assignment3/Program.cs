@@ -2,9 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 
 /// <summary>
-/// Desc: This program is 
+/// Desc: This program was created to allow the user to add and view their minutes spent gaming per day in a month.
 /// Name: Ganymede
-/// Date: First Half of November, 2025
+/// Date: 11-11-2025
 /// </summary>
 namespace Assignment3
 {
@@ -96,7 +96,7 @@ namespace Assignment3
                         if (AcceptLoadEntryDisclaimer())
                         {
                             string filename = Prompt("Enter name of file to load: ");
-                            // TODO: call LoadFromFile() and assign its return value
+                            count = LoadFromFile(filename, dates, values);
                             Console.WriteLine($"{count} records were loaded.\n");
                         }
                         else
@@ -168,7 +168,7 @@ namespace Assignment3
             {
                 string analysisMenuChoice;
 
-                // TODO: call DisplayAnalysisMenu()
+                DisplayAnalysisMenu();
 
                 analysisMenuChoice = Prompt("Enter ANALYSIS sub-menu option: ").ToUpper();
                 Console.WriteLine();
@@ -176,18 +176,15 @@ namespace Assignment3
                 switch (analysisMenuChoice)
                 {
                     case "A": //[A]verage 
-                        // TODO: uncomment the next 2 lines & call CalculateMean();
-                        //double mean = ;
+                        double mean = CalculateMean(numbers, count);
                         //Console.WriteLine($"The mean value for {month} {year} is: {mean:N2}.\n");
                         break;
                     case "H": //[H]ighest 
-                        // TODO: uncomment the next 2 lines & call CalculateLargest();
-                        //double largest = ;
+                        double largest = CalculateLargest(numbers, count);
                         //Console.WriteLine($"The largest value for {month} {year} is: {largest:N2}.\n");
                         break;
-                    case "L": //[L]owest 
-                        //TODO: uncomment the next 2 lines & call CalculateSmallest();
-                        //double smallest = ;
+                    case "L": //[L]owest
+                        double smallest = CalculateSmallest(numbers, count);
                         //Console.WriteLine($"The smallest value for {month} {year} is: {smallest:N2}.\n");
                         break;
                     case "G": //[G]raph 
@@ -212,7 +209,6 @@ namespace Assignment3
 
         // ++++++++++++++++++++++++++++++++++++ Difficulty 1 ++++++++++++++++++++++++++++++++++++
 
-        // TODO: create the DisplayMainMenu() method
         static void DisplayMainMenu()
         {
             Console.WriteLine("Gaming Minutes Charter Program by Ganymede Mayrose\n" +
@@ -227,7 +223,6 @@ namespace Assignment3
             Console.Write("Enter main menu option ('D' to display menu: ");
         }
 
-        // TODO: create the DisplayAnalysisMenu() method
 
         static void DisplayAnalysisMenu()
         {
@@ -239,7 +234,6 @@ namespace Assignment3
             Console.Write("Enter Analysis Sub-Menu Option: ");
         }
 
-        // TODO: create the Prompt method
         /// <summary>
         /// Asks user for input
         /// </summary>
@@ -248,7 +242,7 @@ namespace Assignment3
         static string Prompt(string msgLabel)
         {
             bool validInput = false;
-            string bring =  null;
+            string bring = "bebbebe";
             while (validInput == false)
             {
                 Console.Write(msgLabel);
@@ -262,7 +256,6 @@ namespace Assignment3
             return bring;
         }
 
-        // TODO: create the PromptDouble() method
         /// <summary>
         /// Reads a double and checks if it is a valid number
         /// </summary>
@@ -286,7 +279,6 @@ namespace Assignment3
             return bubble;
         }
 
-        // optional TODO: create the PromptInt() method
         /// <summary>
         /// Reads an int and checks if it is a valid number
         /// </summary>
@@ -316,42 +308,40 @@ namespace Assignment3
         /// </summary>
         /// <param name="arr"></param>
         /// <returns>Largest number in array</returns>
-        static double CalculateLargest(double[] arr)
+        static double CalculateLargest(double[] arr, int count)
         {
             double theLargestNumber = 0;
-            for (int i = 0; i < arr.Length; i++)
+            for (int i = 0; i < count; i++)
             {
                 if (arr[i] > theLargestNumber) theLargestNumber = arr[i];
             }
             return theLargestNumber;
         }
 
-        // TODO: create the CalculateSmallest() method
         /// <summary>
         /// Flips through an array to find the smallest number in said array
         /// </summary>
         /// <param name="arr"></param>
         /// <returns>Smallest number in array</returns>
-        static double CalculateSmallest(double[] arr)
+        static double CalculateSmallest(double[] arr, int count)
         {
             double theSmallestNumber = 0;
-            for (int i = 0; i < arr.Length; i++)
+            for (int i = 0; i < count; i++)
             {
                 if (arr[i] < theSmallestNumber) theSmallestNumber = arr[i];
             }
             return theSmallestNumber;
         }
 
-        // TODO: create the CalculateMean() method
         /// <summary>
         /// Calculate mean average of an array
         /// </summary>
         /// <param name="arr"></param>
         /// <returns>The mean</returns>
-        static double CalculateMean(double[] arr)
+        static double CalculateMean(double[] arr, int count)
         {
             double mean = 0;
-            for (int i = 0;i < arr.Length; i++)
+            for (int i = 0;i < count; i++)
             {
                 mean += arr[i];
             }
@@ -360,7 +350,6 @@ namespace Assignment3
 
         // ++++++++++++++++++++++++++++++++++++ Difficulty 2 ++++++++++++++++++++++++++++++++++++
 
-        // TODO: create the EnterDailyValues method
         /// <summary>
         /// Allows the user to inform the computer how many minutes of gaming they've accomplished on each day of a month.
         /// </summary>
@@ -420,18 +409,47 @@ namespace Assignment3
             return count;
         }
 
-            // TODO: create the LoadFromFile method
-            // take data from file and load into arrays
+        /// <summary>
+        /// Load values from file into memory.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="dates"></param>
+        /// <param name="values"></param>
+        /// <returns>Count, how many entries there are</returns>
+        static int LoadFromFile(string filename, string[] dates, double[] values)
+        {
+            int count = 0;
+            string currentDate;
+            double currentValue;
+            StreamReader reader = new StreamReader(filename);
+            if (File.Exists(filename))
+            {
+                try
+                {
+                    while (reader.EndOfStream == false)
+                    {
+                        string[] lines = reader.ReadLine().Split(',');
+                        dates[count] = lines[0];
+                        values[count] = Convert.ToDouble(lines[1]);
+                        count++;
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("Error occurred!");
+                }
+            }
+            reader.Close();
+            return count;
+        }
 
-
-            // TODO: create the SaveToFile method
-            /// <summary>
-            /// Take data from memory and save to file.
-            /// </summary>
-            /// <param name="filename"></param>
-            /// <param name="dates"></param>
-            /// <param name="values"></param>
-            /// <param name="count"></param>
+        /// <summary>
+        /// Take data from memory and save to file.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="dates"></param>
+        /// <param name="values"></param>
+        /// <param name="count"></param>
         static void SaveToFile(string filename, string[] dates, double[] values, int count)
         {
             StreamWriter writer = new StreamWriter(filename);
